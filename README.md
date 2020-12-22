@@ -22,7 +22,7 @@ Ex: docker-compose up --build
 URL do projeto localhost:
 http://localhost:8080/swagger-ui.html#/cliente-controller
 
-# URL para testar o projeto
+# URL para testar o projeto no Heroku
 
-http://heroku.....
+https://desafio-api-produto.herokuapp.com/swagger-ui.html
 

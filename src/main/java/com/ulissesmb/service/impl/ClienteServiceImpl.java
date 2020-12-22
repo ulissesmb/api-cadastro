@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -47,12 +48,11 @@ public class ClienteServiceImpl
 			String nome = dto.getNome();
 			dto.setNome(nome.toUpperCase());
 
-			List<EnderecoDTO> resultEnd = enderecoService
-					.filter(new EnderecoSearchFilterImpl(dto.getEndereco().getCep()));
-			EnderecoDTO enderecoDTO = resultEnd.get(0);
+			EnderecoDTO enderecoDTO = getEnderecoByCep(dto.getEndereco().getCep());
 			
 			Cliente cliente = converter(dto);
 			cliente.setEndereco(enderecoService.getById(enderecoDTO.getId()));
+			
 			Cliente saved = getDao().save(cliente);
 			ClienteDTO clienteDTO = converter(saved);
 			clienteDTO.setEndereco(enderecoDTO);
@@ -62,6 +62,11 @@ public class ClienteServiceImpl
 		} catch (Exception e) {
 			throw new BusinessException("9999", "Erro Inesperado "+ e.getMessage());
 		}
+	}
+	
+	private EnderecoDTO getEnderecoByCep(String cep) throws Exception {
+		List<EnderecoDTO> resultEnd = enderecoService.filter(new EnderecoSearchFilterImpl(cep));
+		return (!resultEnd.isEmpty()) ? resultEnd.get(0) : null;
 	}
 
 	@Override
@@ -115,6 +120,28 @@ public class ClienteServiceImpl
 			throw new NotFoundException();
 		
 		result.forEach(c -> getDao().delete(c));
+	}
+
+
+	@Override
+	public void clienteEnderecoAtualizar(Cliente cliente, ClienteDTO clienteDTO) {
+		
+		EnderecoDTO enderecoDTO;
+		try {
+			
+			enderecoDTO = getEnderecoByCep(clienteDTO.getEndereco().getCep());
+			clienteDTO.setId(cliente.getId());
+			clienteDTO.setNome(clienteDTO.getNome().toUpperCase());
+			BeanUtils.copyProperties(clienteDTO, cliente);
+			cliente.setEndereco(enderecoService.getById(enderecoDTO.getId()));
+			
+			getDao().save(cliente);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
 	}
 
 }

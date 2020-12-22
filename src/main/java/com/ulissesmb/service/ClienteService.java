@@ -14,5 +14,7 @@ public interface ClienteService extends AbstractService<Long, Cliente, ClienteSe
 	ClienteDTO getByIdResulDTO(Long id) throws Exception;
 	
 	void removeClienteEndereco(String cpf);
+	
+	void clienteEnderecoAtualizar(Cliente cliente, ClienteDTO clienteDTO);
 
 }

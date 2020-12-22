@@ -30,7 +30,7 @@ public class Cliente implements PersistentEntity, Serializable {
 	private String nome;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="endereco_id", foreignKey=@ForeignKey(name="fk_cliente_endereco"))
+	@JoinColumn(name="endereco_id",  foreignKey=@ForeignKey(name="fk_cliente_endereco"))
 	private Endereco endereco;
 
 	public Cliente() {
@@ -70,6 +70,10 @@ public class Cliente implements PersistentEntity, Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public Long getId() {
+		return id;
 	}
 
 	@Override

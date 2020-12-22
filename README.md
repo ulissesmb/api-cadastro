@@ -24,5 +24,5 @@ http://localhost:8080/swagger-ui.html#/cliente-controller
 
 # URL para testar o projeto no Heroku
 
-https://desafio-api-produto.herokuapp.com/swagger-ui.html
+https://apiclienteproduto.herokuapp.com/swagger-ui.html
 

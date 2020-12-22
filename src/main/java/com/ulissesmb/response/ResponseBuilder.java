@@ -25,17 +25,12 @@ public class ResponseBuilder<R> {
 	}
 
 	public BuilderSuccess withMessage(String message) {
-		if (builderSuccess == null) {
-			builderSuccess = new BuilderSuccess(message);
-		}
-
+		builderSuccess = new BuilderSuccess(message);
 		return builderSuccess;
 	}
 
 	public BuilderError withError(_Error error) {
-		if (builderError == null) {
-			builderError = new BuilderError(error);
-		}
+		builderError = new BuilderError(error);
 		return builderError;
 	}
 

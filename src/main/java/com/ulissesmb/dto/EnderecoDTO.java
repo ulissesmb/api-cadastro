@@ -3,6 +3,7 @@ package com.ulissesmb.dto;
 import java.io.Serializable;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -13,7 +14,8 @@ public class EnderecoDTO implements RequestDTO, Serializable {
 
 	private Long id;
 
-	@NotNull(message = "CEP não pode ser nulo")
+	@NotNull(message = "CEP é obrigatorio.")
+	@Size(min = 8, max = 8, message = "Campo CEP é obrigatorio e necessario 8 caracteres.")
 	private String cep;
 
 	private String logradouro;

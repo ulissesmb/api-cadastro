@@ -1,5 +1,6 @@
 package com.ulissesmb.dto;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -18,12 +19,13 @@ public class ClienteDTO implements RequestDTO {
 
 	@NotNull(message = MSG_NOME_NOT_NULL)
 	@Size(min = 3, max = 30, message = MSG_SIZE_NOME)
-	private String cpf;
+	private String nome;
 
 	@NotNull(message = MSG_CPF_NOT_NULL)
 	@Size(min = 11, max = 11, message = MSG_VALIDATOR_SIZE_CPF)
-	private String nome;
+	private String cpf;
 
+	@Valid
 	private EnderecoDTO endereco;
 
 	public ClienteDTO() {

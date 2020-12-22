@@ -10,5 +10,9 @@ import com.ulissesmb.dto.ClienteDTO;
 public interface ClienteService extends AbstractService<Long, Cliente, ClienteSearchFilter, ClienteDTO> {
 	
 	List<ClienteDTO> getClienteOrderDesc() throws Exception;
+	
+	ClienteDTO getByIdResulDTO(Long id) throws Exception;
+	
+	void removeClienteEndereco(String cpf);
 
 }

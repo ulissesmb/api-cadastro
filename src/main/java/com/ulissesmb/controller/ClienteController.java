@@ -55,15 +55,9 @@ public class ClienteController extends ResponseBuilder<ClienteDTO>{
 	@PostMapping
 	@Secured({ "ROLE_ADMIN", "ROLE_USUARIO" })
 	public ResponseEntity<Response<ClienteDTO>> add(@Valid @RequestBody ClienteDTO dto) throws Exception {
-
-		if (dto.getId() == null || dto.getId() == 0) {
-			dto.setId(null);
-		}
-
-		String nome = dto.getNome();
-		dto.setNome(nome.toUpperCase());
 		
-		return withData(clienteService.saveConverterDTO(dto))
+		ClienteDTO response = clienteService.saveConverterDTO(dto);
+		return withData(response)
 				.withMessage(SAVED_MESSAGE).withHttp(HttpStatus.CREATED)
 				.build();
 	}
@@ -83,14 +77,14 @@ public class ClienteController extends ResponseBuilder<ClienteDTO>{
 	@GetMapping(value = "{id}")
 	@Secured({ "ROLE_ADMIN", "ROLE_USUARIO" })
 	public ResponseEntity<Response<ClienteDTO>> get(@PathVariable Long id) throws Exception {
-		return withData(clienteService.getByIdConverterDTO(id)).build();
+		return withData(clienteService.getByIdResulDTO(id)).build();
 	}
 
-	@DeleteMapping(value = "{id}")
+	@DeleteMapping(value = "{cpf}")
 	@Secured("ROLE_ADMIN")
-	public ResponseEntity<Response<ClienteDTO>> delete(@PathVariable Long id) throws Exception {
-		clienteService.deleteById(id);
-		return withMessage(DELETED_MESSAGE).build();
+	public ResponseEntity<Response<ClienteDTO>> delete(@PathVariable String cpf) throws Exception {
+		clienteService.removeClienteEndereco(cpf);
+		return  withMessage(DELETED_MESSAGE).build();
 	}
 
 	@PatchMapping("filter")

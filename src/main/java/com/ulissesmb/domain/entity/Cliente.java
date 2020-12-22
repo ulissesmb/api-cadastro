@@ -4,11 +4,12 @@ import java.io.Serializable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -28,8 +29,8 @@ public class Cliente implements PersistentEntity, Serializable {
 	private String cpf;
 	private String nome;
 
-	@OneToOne(mappedBy = "cliente", cascade = CascadeType.ALL)
-	@PrimaryKeyJoinColumn
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="endereco_id", foreignKey=@ForeignKey(name="fk_cliente_endereco"))
 	private Endereco endereco;
 
 	public Cliente() {

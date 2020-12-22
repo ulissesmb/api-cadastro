@@ -1,8 +1,10 @@
 package com.ulissesmb.service.impl;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -10,15 +12,22 @@ import com.ulissesmb.core.impl.AbstractServiceImpl;
 import com.ulissesmb.domain.entity.Cliente;
 import com.ulissesmb.domain.entity.Cliente_;
 import com.ulissesmb.domain.seach.ClienteSearchFilter;
+import com.ulissesmb.domain.seach.impl.EnderecoSearchFilterImpl;
 import com.ulissesmb.dto.ClienteDTO;
+import com.ulissesmb.dto.EnderecoDTO;
+import com.ulissesmb.exception.BusinessException;
 import com.ulissesmb.exception.NotFoundException;
 import com.ulissesmb.repository.ClienteRepository;
 import com.ulissesmb.service.ClienteService;
+import com.ulissesmb.service.EnderecoService;
 
 @Service
 public class ClienteServiceImpl
 		extends AbstractServiceImpl<Long, Cliente, ClienteSearchFilter, ClienteDTO, ClienteRepository>
 		implements ClienteService {
+	
+	@Autowired
+	private EnderecoService enderecoService;
 
 	
 	public ClienteServiceImpl() {
@@ -28,8 +37,31 @@ public class ClienteServiceImpl
 	
 	@Override
 	public ClienteDTO saveConverterDTO(ClienteDTO dto) {
-		
-		return super.saveConverterDTO(dto);
+
+		try {
+
+			if (Objects.isNull(dto.getId()) || dto.getId() == 0) {
+				dto.setId(null);
+			}
+
+			String nome = dto.getNome();
+			dto.setNome(nome.toUpperCase());
+
+			List<EnderecoDTO> resultEnd = enderecoService
+					.filter(new EnderecoSearchFilterImpl(dto.getEndereco().getCep()));
+			EnderecoDTO enderecoDTO = resultEnd.get(0);
+			
+			Cliente cliente = converter(dto);
+			cliente.setEndereco(enderecoService.getById(enderecoDTO.getId()));
+			Cliente saved = getDao().save(cliente);
+			ClienteDTO clienteDTO = converter(saved);
+			clienteDTO.setEndereco(enderecoDTO);
+
+			return clienteDTO;
+
+		} catch (Exception e) {
+			throw new BusinessException("9999", "Erro Inesperado "+ e.getMessage());
+		}
 	}
 
 	@Override
@@ -39,7 +71,27 @@ public class ClienteServiceImpl
 		if(result.isEmpty())
 			throw new NotFoundException();
 		
-		return result.stream().map( c -> converter(c)).collect(Collectors.toList());
+		List<ClienteDTO> response = result.stream().map(c -> transformar(c))
+				.collect(Collectors.toList());
+		
+		return response;
+	}
+	
+	private ClienteDTO transformar(Cliente cliente) {
+		ClienteDTO clienteDTO = converter(cliente);
+		EnderecoDTO enderecoDTO = enderecoService.converter(cliente.getEndereco());
+		clienteDTO.setEndereco(enderecoDTO);
+		return clienteDTO;
+	}
+	
+	@Override
+	public ClienteDTO getByIdResulDTO(Long id) throws Exception {
+		Cliente cliente = getDao().findById(id).orElseThrow(NotFoundException::new);
+		EnderecoDTO enderecoDTO = enderecoService.converter(cliente.getEndereco());
+		ClienteDTO clienteDTO = converter(cliente);
+		clienteDTO.setEndereco(enderecoDTO);
+		return clienteDTO;
+		
 	}
 	
 	@Override
@@ -51,6 +103,18 @@ public class ClienteServiceImpl
 			throw new NotFoundException();
 
 		return result.stream().map(f -> converter(f)).collect(Collectors.toList());
+	}
+
+
+	@Override
+	public void removeClienteEndereco(String cpf) {
+		super.buildPredicates();
+		super.addLike(super.getRoot().get(Cliente_.CPF), cpf);
+		List<Cliente> result = super.search();
+		if (result.isEmpty())
+			throw new NotFoundException();
+		
+		result.forEach(c -> getDao().delete(c));
 	}
 
 }

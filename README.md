@@ -1,7 +1,8 @@
 # DESAFIO DESENVOLVEDOR JAVA 
-O Produto é estruturado com SPRING DATA, SPRING SECURITY, SWAGER, GIT, FLYWAY, ENCACHE e deploy no HEROKU.
+Construa uma API REST com as funcionalidades de um cadastro de seus clientes
+(nome, cpf e endereço). colocar no HEROKU
 
-![Captura de Tela 2020-06-03 às 13 26 10](https://user-images.githubusercontent.com/10280913/83663236-fa3dee80-a59e-11ea-9890-03a5e39a8f49.png)
+![relacionameto](https://user-images.githubusercontent.com/10280913/102848184-f4044800-43f2-11eb-9073-3d57ef88ce1c.png)
 
 # Visualização da tela
 
@@ -9,5 +10,5 @@ O Produto é estruturado com SPRING DATA, SPRING SECURITY, SWAGER, GIT, FLYWAY, 
 
 # URL para testar o projeto
 
-https://brasilprevproduto.herokuapp.com/swagger-ui.html
+http://heroku.....
 

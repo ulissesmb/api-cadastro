@@ -4,7 +4,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.ulissesmb</groupId>
-	<artifactId>api-cadastro</artifactId>
+	<artifactId>api-cadastrov2</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>api-cadastro</name>
 	<description>api-cadastro</description>

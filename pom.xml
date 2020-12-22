@@ -123,23 +123,7 @@
 			<version>1.2.0</version>
 		</dependency>
 
-
 	</dependencies>
-
-	<repositories>
-		<repository>
-			<id>central</id>
-			<url>http://gotoNexus</url>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>daily</updatePolicy>
-			</releases>
-		</repository>
-	</repositories>
 
 	<build>
 	<finalName>${artifactId}</finalName>
